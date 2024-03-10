@@ -25,17 +25,11 @@ import kotlin.time.measureTime
 @Component
 class LoggingAdvice {
 
-    /**
-     * Point cut for service layer functions
-     */
+
     @Pointcut(value = "within(com.codergm.productservice.service..*)")
-    fun servicePointcut() {
-        //Point cut for service layer functions
+    fun servicePointcut() { //Point cut for service layer functions
     }
 
-    /**
-     * Point cut for controller layer functions
-     * */
     @Pointcut(
         value = "within(com.codergm.productservice.controller..*) " +
                 "&& (@annotation(org.springframework.web.bind.annotation.GetMapping)" +
@@ -43,8 +37,7 @@ class LoggingAdvice {
                 "|| @annotation(org.springframework.web.bind.annotation.PutMapping)" +
                 "|| @annotation(org.springframework.web.bind.annotation.DeleteMapping)))"
     )
-    fun controllerRequestPointcut() {
-        //Point cut for controller layer functions
+    fun controllerRequestPointcut() { //Point cut for controller layer functions
     }
 
     @Around("servicePointcut()")
