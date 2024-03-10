@@ -1,6 +1,8 @@
 package com.codergm.productservice.service
 
+import com.codergm.productservice.constant.PRODUCT_NOT_FOUND
 import com.codergm.productservice.entity.Product
+import com.codergm.productservice.exception.ProductException
 import com.codergm.productservice.model.ProductRequest
 import com.codergm.productservice.model.ProductResponse
 import com.codergm.productservice.repository.ProductRepository
@@ -16,7 +18,7 @@ class ProductService(val productRepository: ProductRepository) {
 
     fun getProductById(id: Long): ProductResponse {
         val product = productRepository.findById(id)
-            .orElseThrow { RuntimeException("Product with id: ${id} not found") }
+            .orElseThrow { ProductException("Product with id: ${id} not found", PRODUCT_NOT_FOUND) }
         return ProductResponse(
             productName = product.productName,
             productId = product.productId,

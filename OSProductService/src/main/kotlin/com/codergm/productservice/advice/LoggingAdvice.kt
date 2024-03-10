@@ -1,7 +1,6 @@
 package com.codergm.productservice.advice
 
 import com.codergm.productservice.constant.*
-import com.codergm.productservice.model.LogData
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.ProceedingJoinPoint
@@ -10,7 +9,6 @@ import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Pointcut
 import org.aspectj.lang.reflect.CodeSignature
 import org.aspectj.lang.reflect.MethodSignature
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -20,19 +18,24 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
-import java.util.Collections
 import java.util.Objects
-import kotlin.time.Duration
 import kotlin.time.measureTime
 
 @Aspect
 @Component
 class LoggingAdvice {
 
+    /**
+     * Point cut for service layer functions
+     */
     @Pointcut(value = "within(com.codergm.productservice.service..*)")
     fun servicePointcut() {
+        //Point cut for service layer functions
     }
 
+    /**
+     * Point cut for controller layer functions
+     * */
     @Pointcut(
         value = "within(com.codergm.productservice.controller..*) " +
                 "&& (@annotation(org.springframework.web.bind.annotation.GetMapping)" +
@@ -41,6 +44,7 @@ class LoggingAdvice {
                 "|| @annotation(org.springframework.web.bind.annotation.DeleteMapping)))"
     )
     fun controllerRequestPointcut() {
+        //Point cut for controller layer functions
     }
 
     @Around("servicePointcut()")

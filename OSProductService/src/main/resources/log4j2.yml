@@ -7,11 +7,6 @@ Configuration:
       PatternLayout:
         Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
 
-    #File:
-    #  name: File
-    #  fileName: logs/app.log
-    #  PatternLayout:
-    #    Pattern: "%d %p %C{1.} [%t] %m%n"
 
     RollingFile:
       - name: LogToRollingFile
@@ -24,17 +19,39 @@ Configuration:
             size: 10MB
         DefaultRollOverStrategy:
           max: 10
+        Filters:
+          - LevelRangeFilter:
+              minLevel: INFO
+              maxLevel: DEBUG
+              onMatch: ACCEPT
+              onMismatch: DENY
+      - name: LogErrorToRollingFile
+        fileName: logs/product-service-error.log
+        filePattern: "logs/$${date:yyyy-MM-dd}/product-service-error-%d{MM-dd-yyyy}-%i.log.zip"
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 10MB
+        DefaultRollOverStrategy:
+          max: 10
+        Filters:
+          - LevelRangeFilter:
+              minLevel: ERROR
+              maxLevel: ERROR
+              onMatch: ACCEPT
+              onMismatch: DENY
 
   Loggers:
     logger:
       - name: com.codergm.productservice
-        level: debug
+        level: info
         additivity: false
         AppenderRef:
           - ref: LogToConsole
           - ref: LogToRollingFile
-
+          - ref: LogErrorToRollingFile
     Root:
       level: error
       AppenderRef:
-        ref: LogToConsole
+        - ref: LogToConsole
